@@ -53,7 +53,7 @@ while True:
     # debug output
     print strftime("%Y-%m-%d %H:%M:%S", gmtime()), taster_use, checkSleep()
 
-    if taster_use is True:
+    if taster_use == 1:
         PlaySound()
     time.sleep(0.2)
 
