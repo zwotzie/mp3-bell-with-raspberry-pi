@@ -1,9 +1,10 @@
 #!/usr/bin/python
-import RPi.GPIO as GPIO
-import time
-import os
 import datetime
+import os
+import time
 from time import gmtime, strftime
+
+import RPi.GPIO as GPIO
 
 # Taster_vorne = None
 # Taster_Haustuer_unten = None
@@ -20,15 +21,19 @@ GPIO.setup(Relais, GPIO.OUT)
 GPIO.setup(Taster_Haustuer_oben, GPIO.IN)
 GPIO.output(Relais, GPIO.LOW)
 
-ruhe_start = datetime.time(20, 10, 0) # Start Uhrzeit
-ruhe_ende  = datetime.time(6, 30, 0)  # Ende Uhrzeit
+# if you want to shut down the bell at night
+# adjust your time frame here:
+ruhe_start = datetime.time(22, 30, 0) # Start Time
+ruhe_ende  = datetime.time(6, 30, 0)  # End Time
+
+mp3_file = "Klingelton_Trompete_Attacke.mp3"
 
 
-def Klingeln():
-    """ Ansteuern der Klingel nach Tastendruck """
-    GPIO.output(Relais, GPIO.HIGH)
-    os.system('mpg321 Klingelton_Trompete_Attacke.mp3')
-    GPIO.output(Relais, GPIO.LOW)
+def PlaySound():
+    """ pleae play the mp3 """
+    GPIO.output(Relais, GPIO.HIGH)  # switch base of bc 550c
+    os.system('mpg321 '+mp3_file )
+    GPIO.output(Relais, GPIO.LOW)   # switch off again
 
 
 def time_in_range(start, end, x):
@@ -39,14 +44,16 @@ def time_in_range(start, end, x):
         return start <= x or x <= end
 
 
-def checkNachtruhe():
+def checkSleep():
     return time_in_range(ruhe_start, ruhe_ende, datetime.datetime.now().time())
 
 
 while True:
     taster_use = GPIO.input(Taster_Haustuer_oben)
-    print strftime("%Y-%m-%d %H:%M:%S", gmtime()), taster_use, checkNachtruhe()
-    if taster_use == True:
-        Klingeln()
+    # debug output
+    print strftime("%Y-%m-%d %H:%M:%S", gmtime()), taster_use, checkSleep()
+
+    if taster_use is True:
+        PlaySound()
     time.sleep(0.2)
 
