@@ -26,7 +26,7 @@ GPIO.output(Relais, GPIO.LOW)
 ruhe_start = datetime.time(22, 30, 0) # Start Time
 ruhe_ende  = datetime.time(6, 30, 0)  # End Time
 
-mp3_file = "Klingelton_Trompete_Attacke.mp3"
+mp3_file = "ringtones/Klingelton_Trompete_Attacke.mp3"
 
 
 def PlaySound():
