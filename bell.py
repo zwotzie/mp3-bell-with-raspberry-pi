@@ -51,9 +51,9 @@ def checkSleep():
 while True:
     taster_use = GPIO.input(Taster_Haustuer_oben)
     # debug output
-    print strftime("%Y-%m-%d %H:%M:%S", gmtime()), taster_use, checkSleep()
 
     if taster_use == 1:
+        print strftime("%Y-%m-%d %H:%M:%S", gmtime()), taster_use, checkSleep()
         PlaySound()
     time.sleep(0.2)
 
