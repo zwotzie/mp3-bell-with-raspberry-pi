@@ -6,20 +6,28 @@ from time import gmtime, strftime
 
 import RPi.GPIO as GPIO
 
-# Taster_vorne = None
-# Taster_Haustuer_unten = None
-Taster_Haustuer_oben = 14
+Taster_vorne = 14
+Taster_Haustuer_unten = 15
+Taster_Haustuer_oben = 18
 
-# Relais_oben = None
-# Relais_unten = None
-Relais = 7
+Relais_oben = 8
+Relais_unten = 25
+
+Relais_x = 23
+Relais_y = 24
 
 GPIO.setmode(GPIO.BCM)
 # GPIO.setwarnings(False)
 GPIO.setwarnings(True)
-GPIO.setup(Relais, GPIO.OUT)
+GPIO.setup(Relais_oben, GPIO.OUT)
+GPIO.setup(Relais_unten, GPIO.OUT)
+
 GPIO.setup(Taster_Haustuer_oben, GPIO.IN)
-GPIO.output(Relais, GPIO.LOW)
+GPIO.setup(Taster_Haustuer_unten, GPIO.IN)
+GPIO.setup(Taster_vorne, GPIO.IN)
+
+GPIO.output(Relais_oben, GPIO.LOW)
+GPIO.output(Relais_unten, GPIO.LOW)
 
 # if you want to shut down the bell at night
 # adjust your time frame here:
@@ -31,9 +39,11 @@ mp3_file = "ringtones/Klingelton_Trompete_Attacke.mp3"
 
 def PlaySound():
     """ pleae play the mp3 """
-    GPIO.output(Relais, GPIO.HIGH)  # switch base of bc 550c
+    GPIO.output(Relais_unten, GPIO.HIGH)  # switch base of bc 550c
+    GPIO.output(Relais_oben,  GPIO.HIGH)  # switch base of bc 550c
     os.system('mpg321 '+mp3_file )
-    GPIO.output(Relais, GPIO.LOW)   # switch off again
+    GPIO.output(Relais_unten, GPIO.LOW)   # switch off again
+    GPIO.output(Relais_oben,  GPIO.LOW)   # switch off again
 
 
 def time_in_range(start, end, x):
@@ -49,10 +59,13 @@ def checkSleep():
 
 
 while True:
-    taster_use = GPIO.input(Taster_Haustuer_oben)
+    taster_use = [GPIO.input(Taster_Haustuer_unten),
+                  GPIO.input(Taster_Haustuer_oben),
+                  GPIO.input(Taster_vorne),
+                  ]
     # debug output
 
-    if taster_use == 1:
+    if 1 in taster_use:
         print strftime("%Y-%m-%d %H:%M:%S", gmtime()), taster_use, checkSleep()
         PlaySound()
     time.sleep(0.2)
