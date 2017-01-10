@@ -20,6 +20,13 @@ GPIO.setup(Relais_unten,  GPIO.OUT)
 GPIO.output(Relais_oben,  GPIO.LOW)
 GPIO.output(Relais_unten, GPIO.LOW)
 
+# .
+# G
+# P  oo => Taster_vorne
+# I  oo => Taster_Haustuer_unten
+# O  oo => Taster_Haustuer_oben
+# .
+
 Taster_vorne = 14
 Taster_Haustuer_unten = 15
 Taster_Haustuer_oben = 18
@@ -69,10 +76,8 @@ while True:
     # debug output
 
     if 1 in taster_use:
-	print "-----------------------------------------------------"
-        print strftime("%Y-%m-%d %H:%M:%S", gmtime()), taster_use, checkSleep()
-	print "-----------------------------------------------------"
+        print "+----------------------------------------------------"
+        print "|   ", strftime("%Y-%m-%d %H:%M:%S", gmtime()), taster_use, checkSleep()
+        print "+----------------------------------------------------"
         PlaySound()
     time.sleep(0.2)
-
-
