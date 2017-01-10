@@ -6,37 +6,34 @@ from time import gmtime, strftime
 
 import RPi.GPIO as GPIO
 
-Taster_vorne = 14
-Taster_Haustuer_unten = 15
-Taster_Haustuer_oben = 18
+# Relais_x = 23
+# Relais_y = 24
 
-Relais_x = 23
-Relais_y = 24
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+# GPIO.setwarnings(True)
 
 Relais_oben = 8
 Relais_unten = 25
-
-GPIO.setmode(GPIO.BCM)
-# GPIO.setwarnings(False)
-GPIO.setwarnings(True)
-
 GPIO.setup(Relais_oben,   GPIO.OUT)
 GPIO.setup(Relais_unten,  GPIO.OUT)
 GPIO.output(Relais_oben,  GPIO.LOW)
 GPIO.output(Relais_unten, GPIO.LOW)
 
+Taster_vorne = 14
+Taster_Haustuer_unten = 15
+Taster_Haustuer_oben = 18
 GPIO.setup(Taster_Haustuer_oben,  GPIO.IN)
 GPIO.setup(Taster_Haustuer_unten, GPIO.IN)
 GPIO.setup(Taster_vorne,          GPIO.IN)
-
 
 # if you want to shut down the bell at night
 # adjust your time frame here:
 ruhe_start = datetime.time(22, 30, 0) # Start Time
 ruhe_ende  = datetime.time(6, 30, 0)  # End Time
 
-mp3_file = "ringtones/Klingelton_Trompete_Attacke.mp3"
-
+mp3_file_name = "Klingelton_Trompete_Attacke.mp3"
+mp3_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'ringtones', mp3_file_name)
 
 def PlaySound():
     """ please play the mp3 """
@@ -72,8 +69,10 @@ while True:
     # debug output
 
     if 1 in taster_use:
+	print "-----------------------------------------------------"
         print strftime("%Y-%m-%d %H:%M:%S", gmtime()), taster_use, checkSleep()
- #       PlaySound()
+	print "-----------------------------------------------------"
+        PlaySound()
     time.sleep(0.2)
 
 
