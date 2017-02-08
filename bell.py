@@ -40,6 +40,7 @@ ruhe_start = datetime.time(22, 30, 0) # Start Time
 ruhe_ende  = datetime.time(6, 30, 0)  # End Time
 
 mp3_file_name = "Klingelton_Trompete_Attacke.mp3"
+mp3_file_name = "Kuckucksuhr.mp3"
 mp3_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'ringtones', mp3_file_name)
 
 def PlaySound():
