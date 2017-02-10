@@ -37,7 +37,7 @@ def logmessage(message):
 
 
 logmessage("+-----  S T A R T  ----------------------------------")
-logmessage("|   ", strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+logmessage("|   %r" % strftime("%Y-%m-%d %H:%M:%S", gmtime()))
 logmessage("+----------------------------------------------------")
 
 # Relais_x = 23
@@ -116,11 +116,11 @@ def main():
 
         if 1 in taster_use:
             logmessage("+----------------------------------------------------")
-            logmessage("|   ", strftime("%Y-%m-%d %H:%M:%S", gmtime()))
-            logmessage("|   checkSleeping Time:   ", checkSleep())
-            logmessage("|   Taster_Haustuer_unten ", taster_use[0])
-            logmessage("|   Taster_Haustuer_oben  ", taster_use[0])
-            logmessage("|   Taster_vorne          ", taster_use[0])
+            logmessage("|   %r" % strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+            logmessage("|   checkSleeping Time:   %r" % checkSleep())
+            logmessage("|   Taster_Haustuer_unten %r" % taster_use[0])
+            logmessage("|   Taster_Haustuer_oben  %r" % taster_use[0])
+            logmessage("|   Taster_vorne          %r" % taster_use[0])
             logmessage("+----------------------------------------------------")
             PlaySound()
         time.sleep(0.2)
