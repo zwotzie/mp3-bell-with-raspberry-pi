@@ -35,6 +35,11 @@ def logmessage(message):
     else:
         print message
 
+
+logmessage("+-----  S T A R T  ----------------------------------")
+logmessage("|   ", strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+logmessage("+----------------------------------------------------")
+
 # Relais_x = 23
 # Relais_y = 24
 
