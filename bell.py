@@ -1,10 +1,39 @@
 #!/usr/bin/python
 import datetime
 import os
+import sys
 import time
 from time import gmtime, strftime
+import platform
+from ConfigParser import SafeConfigParser
+import logging
+from logging import config
 
-import RPi.GPIO as GPIO
+raspberry = False
+if 'raspberrypi' in platform.uname():
+    # global raspberry
+    raspberry = True
+    import RPi.GPIO as GPIO
+
+# Set up a specific logger with our desired output level
+_config_path = os.path.abspath(os.path.dirname(sys.argv[0]))
+_config_file = _config_path + "/etc/bell.conf"
+_config_logger = _config_path+'/etc/logging.conf'
+
+parser = SafeConfigParser()
+parser.read(_config_file)
+log2log = parser.get('bell', 'logger')
+
+logging.config.fileConfig(_config_logger)
+logger = logging.getLogger('bell')
+logger.propagate = False
+
+
+def logmessage(message):
+    if log2log == "True":
+        logger.info(message)
+    else:
+        print message
 
 # Relais_x = 23
 # Relais_y = 24
@@ -43,6 +72,7 @@ mp3_file_name = "Klingelton_Trompete_Attacke.mp3"
 mp3_file_name = "Kuckucksuhr.mp3"
 mp3_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'ringtones', mp3_file_name)
 
+
 def PlaySound():
     """ please play the mp3 """
     # first switch power on to amplifier
@@ -58,6 +88,7 @@ def PlaySound():
     # switch off power to amplifier
     GPIO.output(Relais_oben,  GPIO.LOW)   # switch off again
 
+
 def time_in_range(start, end, x):
     """Return true if x is in the range [start, end]"""
     if start <= end:
@@ -69,6 +100,7 @@ def time_in_range(start, end, x):
 def checkSleep():
     return time_in_range(ruhe_start, ruhe_ende, datetime.datetime.now().time())
 
+
 def main():
     while True:
         taster_use = [GPIO.input(Taster_Haustuer_unten),
@@ -78,9 +110,13 @@ def main():
         # debug output
 
         if 1 in taster_use:
-            print "+----------------------------------------------------"
-            print "|   ", strftime("%Y-%m-%d %H:%M:%S", gmtime()), taster_use, checkSleep()
-            print "+----------------------------------------------------"
+            logmessage("+----------------------------------------------------")
+            logmessage("|   ", strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+            logmessage("|   checkSleeping Time:   ", checkSleep())
+            logmessage("|   Taster_Haustuer_unten ", taster_use[0])
+            logmessage("|   Taster_Haustuer_oben  ", taster_use[0])
+            logmessage("|   Taster_vorne          ", taster_use[0])
+            logmessage("+----------------------------------------------------")
             PlaySound()
         time.sleep(0.2)
 
