@@ -79,6 +79,7 @@ def PlaySound():
     # get the right filename:
     mp3_file_name = parser.get('bell', 'mp3_file_name')
     mp3_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'ringtones', mp3_file_name)
+    logmessage("playing file: %s" % mp3_file_name)
 
     # first switch power on to amplifier
     GPIO.output(Relais_unten, GPIO.HIGH)  # switch base of bc 550c
