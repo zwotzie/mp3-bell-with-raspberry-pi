@@ -68,13 +68,13 @@ GPIO.setup(Taster_vorne,          GPIO.IN)
 ruhe_start = datetime.time(22, 30, 0) # Start Time
 ruhe_ende  = datetime.time(6, 30, 0)  # End Time
 
-mp3_file_name = "Klingelton_Trompete_Attacke.mp3"
-mp3_file_name = "Kuckucksuhr.mp3"
-mp3_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'ringtones', mp3_file_name)
-
 
 def PlaySound():
     """ please play the mp3 """
+    # get the right filename:
+    mp3_file_name = parser.get('bell', 'mp3_file_name')
+    mp3_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'ringtones', mp3_file_name)
+
     # first switch power on to amplifier
     GPIO.output(Relais_unten, GPIO.HIGH)  # switch base of bc 550c
     # play sound
