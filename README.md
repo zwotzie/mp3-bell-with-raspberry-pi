@@ -9,6 +9,18 @@ supervisor http://supervisord.org. The advantages are awesome:
 * supervisord will start the program automatically - also after reboot 
 * take care of restart, if the script exited unexpected!
 
+
+# GpIO
+- gpio 25 Relais 1: rings the bell first flor
+- gpio 08 Relais 2: rings the bell second flor
+- gpio 23 Relais "heating system" see project raspberry-pi-heizung
+- gpio 24 ?
+- gpio 14 push button 1: for first flor
+- gpio 15 push button 2: for second flor
+- gpio 16 push button 3: for entrance to the property
+
+
 # Acknowledgment
 
 Thanks to Erik Bartmann for his inspiring Book "Die elektronische Welt mit Raspberry Pi entdecken"
+
