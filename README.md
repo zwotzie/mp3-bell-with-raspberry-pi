@@ -15,8 +15,8 @@ supervisor http://supervisord.org. The advantages are awesome:
 - gpio 08 Relais 2: rings the bell second flor
 - gpio 23 Relais "heating system" see project raspberry-pi-heizung
 - gpio 24 ?
-- gpio 14 push button 1: for first flor
-- gpio 15 push button 2: for second flor
+- gpio 14 push button 1: for second flor
+- gpio 15 push button 2: for first flor
 - gpio 16 push button 3: for entrance to the property
 
 
