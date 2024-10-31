@@ -5,7 +5,7 @@ import sys
 import time
 from time import gmtime, strftime
 import platform
-from ConfigParser import SafeConfigParser
+import tomllib
 import logging
 from logging import config
 
@@ -20,9 +20,12 @@ _config_path = os.path.abspath(os.path.dirname(sys.argv[0]))
 _config_file = _config_path + "/etc/bell.conf"
 _config_logger = _config_path+'/etc/logging.conf'
 
-parser = SafeConfigParser()
-parser.read(_config_file)
-log2log = parser.get('bell', 'logger')
+
+with open(_config_file, 'rb') as f:
+    config = tomllib.load(f)
+
+mp3_file_name = config['bell'].get('mp3_file_name')
+log2log = config['bell'].get('logger')
 
 logging.config.fileConfig(_config_logger)
 logger = logging.getLogger('bell')
@@ -33,7 +36,7 @@ def logmessage(message):
     if log2log == "True":
         logger.info(message)
     else:
-        print message
+        print(message)
 
 
 logmessage("+-----  S T A R T  ----------------------------------")
@@ -74,10 +77,10 @@ ruhe_start = datetime.time(22, 30, 0) # Start Time
 ruhe_ende  = datetime.time(6, 30, 0)  # End Time
 
 
-def PlaySound():
+def play_sound():
     """ please play the mp3 """
     # get the right filename:
-    mp3_file_name = parser.get('bell', 'mp3_file_name')
+
     mp3_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'ringtones', mp3_file_name)
     logmessage("playing file: %s" % mp3_file_name)
 
@@ -123,7 +126,7 @@ def main():
             logmessage("|   Taster_Haustuer_oben  %r" % taster_use[1])
             logmessage("|   Taster_vorne          %r" % taster_use[2])
             logmessage("+----------------------------------------------------")
-            PlaySound()
+            play_sound()
         time.sleep(0.2)
 
 
