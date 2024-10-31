@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/env/bin python
 import datetime
 import os
 import sys
@@ -32,16 +32,16 @@ logger = logging.getLogger('bell')
 logger.propagate = False
 
 
-def logmessage(message):
+def log_message(message):
     if log2log == "True":
         logger.info(message)
     else:
         print(message)
 
 
-logmessage("+-----  S T A R T  ----------------------------------")
-logmessage("|   %r" % strftime("%Y-%m-%d %H:%M:%S", gmtime()))
-logmessage("+----------------------------------------------------")
+log_message("+-----  S T A R T  ----------------------------------")
+log_message("|   %r" % strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+log_message("+----------------------------------------------------")
 
 # Relais_x = 23
 # Relais_y = 24
@@ -50,52 +50,46 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 # GPIO.setwarnings(True)
 
-Relais_oben = 8
-Relais_unten = 25
-GPIO.setup(Relais_oben,   GPIO.OUT)
-GPIO.setup(Relais_unten,  GPIO.OUT)
-GPIO.output(Relais_oben,  GPIO.LOW)
-GPIO.output(Relais_unten, GPIO.LOW)
+relais_oben = 8
+relais_unten = 25
+
+GPIO.setup(relais_oben, GPIO.OUT)
+GPIO.setup(relais_unten, GPIO.OUT)
+GPIO.output(relais_oben, GPIO.LOW)
+GPIO.output(relais_unten, GPIO.LOW)
 
 # .
 # G
-# P  oo => Taster_vorne
-# I  oo => Taster_Haustuer_unten
-# O  oo => Taster_Haustuer_oben
+# P  oo => taster_vorne
+# I  oo => taster_haustuer_unten
+# O  oo => taster_haustuer_oben
 # .
 
-Taster_vorne = 18
-Taster_Haustuer_unten = 15
-Taster_Haustuer_oben = 14
-GPIO.setup(Taster_Haustuer_oben,  GPIO.IN)
-GPIO.setup(Taster_Haustuer_unten, GPIO.IN)
-GPIO.setup(Taster_vorne,          GPIO.IN)
+taster_vorne = 18
+taster_haustuer_unten = 15
+taster_haustuer_oben = 14
+
+GPIO.setup(taster_haustuer_oben, GPIO.IN)
+GPIO.setup(taster_haustuer_unten, GPIO.IN)
+GPIO.setup(taster_vorne, GPIO.IN)
 
 # if you want to shut down the bell at night
 # adjust your time frame here:
 ruhe_start = datetime.time(22, 30, 0) # Start Time
 ruhe_ende  = datetime.time(6, 30, 0)  # End Time
 
+mp3_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'ringtones', mp3_file_name)
 
-def play_sound():
+
+def play_sound(relais):
     """ please play the mp3 """
-    # get the right filename:
-
-    mp3_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'ringtones', mp3_file_name)
-    logmessage("playing file: %s" % mp3_file_name)
+    log_message("playing file: %s" % mp3_file)
 
     # first switch power on to amplifier
-    GPIO.output(Relais_unten, GPIO.HIGH)  # switch base of bc 550c
-    # play sound
-    os.system('mpg321 '+mp3_file )
+    GPIO.output(relais, GPIO.HIGH)  # switch base of bc 550c
+    os.system('mpg321 '+mp3_file )  # play sound
     # switch off power to amplifier
-    GPIO.output(Relais_unten, GPIO.LOW)   # switch off again
-
-    GPIO.output(Relais_oben,  GPIO.HIGH)  # switch base of bc 550c
-    # play sound
-    os.system('mpg321 '+mp3_file )
-    # switch off power to amplifier
-    GPIO.output(Relais_oben,  GPIO.LOW)   # switch off again
+    GPIO.output(relais, GPIO.LOW)   # switch off again
 
 
 def time_in_range(start, end, x):
@@ -106,27 +100,28 @@ def time_in_range(start, end, x):
         return start <= x or x <= end
 
 
-def checkSleep():
+def check_sleep():
     return time_in_range(ruhe_start, ruhe_ende, datetime.datetime.now().time())
 
 
 def main():
     while True:
-        taster_use = [GPIO.input(Taster_Haustuer_unten),
-                      GPIO.input(Taster_Haustuer_oben),
-                      GPIO.input(Taster_vorne),
+        taster_use = [GPIO.input(taster_haustuer_unten),
+                      GPIO.input(taster_haustuer_oben),
+                      GPIO.input(taster_vorne),
                       ]
         # debug output
 
         if 1 in taster_use:
-            logmessage("+----------------------------------------------------")
-            logmessage("|   %r" % strftime("%Y-%m-%d %H:%M:%S", gmtime()))
-            logmessage("|   checkSleeping Time:   %r" % checkSleep())
-            logmessage("|   Taster_Haustuer_unten %r" % taster_use[0])
-            logmessage("|   Taster_Haustuer_oben  %r" % taster_use[1])
-            logmessage("|   Taster_vorne          %r" % taster_use[2])
-            logmessage("+----------------------------------------------------")
-            play_sound()
+            log_message("+----------------------------------------------------")
+            log_message("|   %r" % strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+            log_message("|   checkSleeping Time:   %r" % check_sleep())
+            log_message("|   taster_haustuer_unten %r" % taster_use[0])
+            log_message("|   taster_haustuer_oben  %r" % taster_use[1])
+            log_message("|   taster_vorne          %r" % taster_use[2])
+            log_message("+----------------------------------------------------")
+            play_sound(relais_unten)
+            play_sound(relais_oben)
         time.sleep(0.2)
 
 
