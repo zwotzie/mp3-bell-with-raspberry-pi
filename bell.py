@@ -64,9 +64,9 @@ GPIO.output(Relais_unten, GPIO.LOW)
 # O  oo => Taster_Haustuer_oben
 # .
 
-Taster_vorne = 14
+Taster_vorne = 18
 Taster_Haustuer_unten = 15
-Taster_Haustuer_oben = 18
+Taster_Haustuer_oben = 14
 GPIO.setup(Taster_Haustuer_oben,  GPIO.IN)
 GPIO.setup(Taster_Haustuer_unten, GPIO.IN)
 GPIO.setup(Taster_vorne,          GPIO.IN)
