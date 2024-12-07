@@ -14,7 +14,11 @@ Install mpg321: `sudo apt install mpg321`
 
 Configure right sound card to play.
 In my case it was:
-
+```
+# ~/.asoundrc 
+defaults.pcm.card 1
+defaults.ctl.card 1
+```
 
 # GpIO
 - gpio 25 Relais 1: rings the bell first flor
