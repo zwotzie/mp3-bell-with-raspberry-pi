@@ -9,6 +9,12 @@ supervisor http://supervisord.org. The advantages are awesome:
 * supervisord will start the program automatically - also after reboot 
 * take care of restart, if the script exited unexpected!
 
+# prerequisits
+Install mpg321: `sudo apt install mpg321`
+
+Configure right sound card to play.
+In my case it was:
+
 
 # GpIO
 - gpio 25 Relais 1: rings the bell first flor
