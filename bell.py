@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import datetime
 import os
 import sys
@@ -67,7 +68,7 @@ def play_sound(relais):
         lgpio.gpio_write(h, relais, 1)
         time.sleep(0.15)
 
-    os.system(f'mpg321 {mp3_file}')
+    os.system(f'mpg123 -a plughw:0,0 {mp3_file}')
 
     if raspberry and h is not None:
         lgpio.gpio_write(h, relais, 0)
@@ -79,15 +80,14 @@ def main():
         while True:
             if raspberry and h is not None:
                 raw_unten = lgpio.gpio_read(h, taster_haustuer_unten)
-                raw_oben = lgpio.gpio_read(h, taster_haustuer_oben)
+                raw_oben  = lgpio.gpio_read(h, taster_haustuer_oben)
                 raw_vorne = lgpio.gpio_read(h, taster_vorne)
 
                 # Neue Logik: 0 = NICHT gedrückt, 1 = gedrückt
                 # (weil Pull-Up nicht funktioniert)
                 taster_use = [raw_unten == 1, raw_oben == 1, raw_vorne == 1]
 
-                print(
-                    f"DEBUG Raw | Unten:{raw_unten}  Oben:{raw_oben}  Vorne:{raw_vorne}  → Klingel aktiv: {taster_use}")
+                # print(f"DEBUG Raw | Unten:{raw_unten}  Oben:{raw_oben}  Vorne:{raw_vorne}  → Klingel aktiv: {taster_use}")
 
             else:
                 taster_use = [False, False, False]
@@ -113,15 +113,13 @@ def main():
 
 # Ruhezeiten
 ruhe_start = datetime.time(22, 30, 0)
-ruhe_ende = datetime.time(6, 30, 0)
-
+ruhe_ende  = datetime.time(6, 30, 0)
 
 def time_in_range(start, end, x):
     if start <= end:
         return start <= x <= end
     else:
         return start <= x or x <= end
-
 
 def check_sleep():
     return time_in_range(ruhe_start, ruhe_ende, datetime.datetime.now().time())
